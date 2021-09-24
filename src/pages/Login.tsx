@@ -1,4 +1,4 @@
-import { Layout, Row } from 'antd'
+import { Card, Layout, Row } from 'antd'
 import Form from 'rc-field-form/es/Form'
 import React, { ReactElement } from 'react'
 import LoginForm from '../components/LoginForm'
@@ -11,7 +11,9 @@ export default function Login({}: Props): ReactElement {
   return (
     <Layout>
       <Row justify='center' align='middle' className="h100">
-        <LoginForm />
+        <Card>
+          <LoginForm />
+        </Card>
       </Row>
     </Layout>
   )
