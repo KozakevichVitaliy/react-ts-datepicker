@@ -1,13 +1,25 @@
-import React, { ReactElement } from 'react'
+import { Button, Modal, Row } from 'antd'
+import React, { ReactElement, useState } from 'react'
+import EventCalendar from '../components/EventCalendar'
+import EventForm from '../components/EventForm'
 
-interface Props {
-  
-}
 
-export default function Event({}: Props): ReactElement {
+export default function Event(): ReactElement {
+  const [modalVisible, setModalVisible] = useState(false)
   return (
     <div>
-      Event Page
+      <EventCalendar events={[]} />
+      <Row justify='center'>
+          <Button onClick={() => setModalVisible(true)}>Add event!</Button>
+      </Row>
+      <Modal
+        title='Add event!'
+        visible={modalVisible}
+        footer={null}
+        onCancel={() => setModalVisible(false)}
+      >
+        <EventForm />
+      </Modal>
     </div>
   )
 }

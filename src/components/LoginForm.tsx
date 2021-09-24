@@ -1,8 +1,8 @@
-import { Button, Col, Form, Input } from 'antd'
-import React, { ChangeEventHandler, ReactElement, SyntheticEvent, useState } from 'react'
+import { Button, Form, Input } from 'antd'
+import React, { ReactElement, SyntheticEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useActions } from '../hooks/useActions'
 import { useTypedUseSelector } from '../hooks/useTypedSelector'
-import { AuthActionCreators } from '../store/reducers/auth/action-creators'
 import { rules } from '../utils/rules'
 
 interface Props {
@@ -13,10 +13,11 @@ export default function LoginForm({}: Props): ReactElement {
   const dispatch = useDispatch()
   const [loginData, setLoginData]= useState({ username: '', password: '' })
   const { error, isLoading } = useTypedUseSelector(state => state.authReducer)
+  const { login } = useActions()
 
   const submit = () => {
     const { username, password }  = loginData
-    dispatch(AuthActionCreators.login(username, password))
+    login(username, password)
   }
 
   const inputHandler = (e: SyntheticEvent) => {
