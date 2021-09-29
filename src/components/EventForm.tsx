@@ -1,41 +1,74 @@
-import { Button, DatePicker, Form, Input, Row } from 'antd'
-import Select from 'rc-select'
-import React, { ReactElement } from 'react'
+import { Button, DatePicker, Form, Input, Row, Select } from 'antd'
+import { Moment } from 'moment'
+import React, { ReactElement, useState } from 'react'
+import { useTypedUseSelector } from '../hooks/useTypedSelector'
+import { IEvent } from '../models/IEvent'
+import { IUser } from '../models/IUser'
+import { formatDate } from '../utils/date'
 import { rules } from '../utils/rules'
 
 interface Props {
-  
+  guests: IUser[]
+  submit: (event: IEvent) => void
 }
 
-export default function EventForm({}: Props): ReactElement {
+export default function EventForm({ guests, submit }: Props): ReactElement {
+  const [event, setEvent] = useState<IEvent>({
+    author: '',
+    guest: '',
+    date: '',
+    description: ''
+  } as IEvent)
+  const { user } = useTypedUseSelector(state => state.authReducer)
+
+  const selectDate = (date: Moment | null) => {
+    if (date) setEvent({ ...event, date: formatDate(date.toDate()) })
+  }
+
+  const submitForm = () => {
+    submit({ ...event, author: user.username })
+  }
+
   return (
-    <Form>
+    <Form
+      onFinish={submitForm}
+    >
       <Form.Item
         label="Event description"
         name="description"
         rules={[rules.required('Please input your event description!')]}
       >
-        <Input />
+        <Input 
+          onChange={e => setEvent({ ...event, description: e.target.value })}
+          value={event.description} 
+        />
       </Form.Item>
       <Form.Item
         label="Event date"
         name="date"
         rules={[rules.required('Please input date event!')]}
       >
-        <DatePicker  />
+        <DatePicker
+          onChange={(data) => selectDate(data)} 
+        />
       </Form.Item>
-      <Form.Item>
-      <Select >
-        <Select.Option value="jack">Jack</Select.Option>
-        <Select.Option value="lucy">Lucy</Select.Option>
-        <Select.Option value="disabled" disabled>
-          Disabled
-        </Select.Option>
-        <Select.Option value="Yiminghe">yiminghe</Select.Option>
-      </Select>
+      <Form.Item
+        label="Guests list"
+        name="guests"
+        rules={[rules.required('Please select guests!')]}
+      >
+        <Select onChange={(guest: string) => setEvent({ ...event, guest })}>
+          {  
+            guests.map(guest => {
+              return (
+                <Select.Option key={guest.username} value={guest.username}>{guest.username}</Select.Option>
+              )
+            })
+          }
+        </Select>
       </Form.Item>
       <Row justify='end'>
-        <Form.Item wrapperCol={{ offset: 18, span: 16 }}>
+        <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
           <Button type="primary" htmlType="submit" >
             Create
           </Button>
