@@ -26,5 +26,8 @@ export const EventActionCreators = {
       console.log(error);
       
     }
+  },
+  fetchEvents: () => async (dispatch: AppDispatch) => {
+
   }
 }
