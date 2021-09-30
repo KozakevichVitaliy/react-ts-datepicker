@@ -46,7 +46,7 @@ export default function EventForm({ guests, submit }: Props): ReactElement {
       <Form.Item
         label="Event date"
         name="date"
-        rules={[rules.required('Please input date event!')]}
+        rules={[rules.required('Please input date event!'), rules.isDateAfter('Not avaible to set date in the past!')]}
       >
         <DatePicker
           onChange={(data) => selectDate(data)} 

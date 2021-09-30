@@ -19,8 +19,8 @@ export const AuthActionCreators = {
         if (mockUser) {
           localStorage.setItem('username', mockUser.username)
           localStorage.setItem('auth', 'true')
-          dispatch(AuthActionCreators.setAuth(true))
           dispatch(AuthActionCreators.setUser(mockUser))
+          dispatch(AuthActionCreators.setAuth(true))
         } else {
           dispatch(AuthActionCreators.setError('Incorrect credential data!'))
         }

@@ -9,11 +9,13 @@ import { IEvent } from '../models/IEvent'
 
 export default function Event(): ReactElement {
   const [modalVisible, setModalVisible] = useState(false)
-  const { fetchGuests, createEvent } = useActions()
-  const { guests,  } = useTypedUseSelector(state => state.eventReducer)
+  const { fetchGuests, createEvent, fetchEvents } = useActions()
+  const { guests, events } = useTypedUseSelector(state => state.eventReducer)
+  const { user } = useTypedUseSelector(state => state.authReducer)
 
   useEffect(() => {
     fetchGuests()
+    fetchEvents(user.username)
   }, [])
 
   const addNewEvent = (event: IEvent) => {
@@ -23,7 +25,7 @@ export default function Event(): ReactElement {
 
   return (
     <div>
-      <EventCalendar events={[]} />
+      <EventCalendar events={events} />
       <Row justify='center'>
           <Button onClick={() => setModalVisible(true)}>Add event!</Button>
       </Row>
